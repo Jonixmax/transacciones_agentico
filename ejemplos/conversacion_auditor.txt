@@ -1,0 +1,113 @@
+# Conversación con el agente Auditor
+# Generado ejecutando el sistema real en modo simulado (sin conexión ni API key).
+# Archivo de datos: datos/transacciones_con_errores.json
+==============================================================================
+Archivo cargado: 24 registros (7 válidos, 17 inválidos).
+
+Buen día, soy Auditor, auditor de calidad de datos. Mi objetivo es explicar por qué se rechazaron registros, agrupar los problemas y proponer cómo corregirlos. Escribe 'ayuda' para ver qué puedo hacer.
+(Escribe /ayuda para ver los comandos)
+
+[Auditor] > hola
+Buen día, soy Auditor, auditor de calidad de datos. Mi objetivo es explicar por qué se rechazaron registros, agrupar los problemas y proponer cómo corregirlos. Escribe 'ayuda' para ver qué puedo hacer.
+
+[Auditor] > resumen de las inválidas
+[Auditor] Informe de calidad de datos
+Se rechazaron 17 de 24 registros (70.8%). Hay 13 tipos de problema:
+  2 x Falta un campo obligatorio  [severidad alta]
+      Causa probable: Registro incompleto o exportación que omitió el campo.
+      Cómo corregirlo: Completa el campo faltante en la fuente (el nombre del campo aparece en el motivo) y vuelve a procesar.
+      Registros: #3, #15
+  2 x Fecha no reconocida  [severidad media]
+      Causa probable: Fecha imposible (como el 31 de febrero), texto libre o un formato no contemplado.
+      Cómo corregirlo: Corrige la fecha en la fuente. Si el formato es válido pero nuevo, agrégalo a 'formatos_fecha' en reglas.json.
+      Registros: #7, #18
+  2 x Monto no numérico  [severidad alta]
+      Causa probable: Texto libre, un valor vacío de sentido o un campo lleno con un dato equivocado.
+      Cómo corregirlo: Corrige el monto en la fuente para que sea un número (por ejemplo 100.50) y vuelve a procesar.
+      Registros: #2, #12
+  2 x Monto cero o negativo  [severidad media]
+      Causa probable: Puede ser un reembolso, una anulación o un error de captura.
+      Cómo corregirlo: Confirma con la fuente si es un reembolso legítimo. Si debe aceptarse, hay que cambiar la regla; si es un error, corrígelo.
+      Registros: #5, #6
+  1 x Conflicto de moneda  [severidad alta]
+      Causa probable: Datos contradictorios en el mismo registro.
+      Cómo corregirlo: Decide cuál es la moneda correcta con la fuente y corrige el otro dato.
+      Registros: #22
+  1 x El registro no es un objeto  [severidad media]
+      Causa probable: Datos ajenos mezclados con las transacciones.
+      Cómo corregirlo: Elimina ese elemento del archivo: no tiene forma de transacción.
+      Registros: #20
+  1 x Fecha con tipo de dato no soportado  [severidad media]
+      Causa probable: La fuente exporta fechas en formato numérico, que este sistema no soporta.
+      Cómo corregirlo: Pide a la fuente que envíe la fecha como texto (por ejemplo ISO-8601).
+      Registros: #13
+  1 x Fuente ambigua  [severidad alta]
+      Causa probable: Registros combinados o mal armados.
+      Cómo corregirlo: Separa el registro o deja solo los campos de su fuente real.
+      Registros: #21
+  1 x Fuente no reconocida  [severidad alta]
+      Causa probable: Una fuente nueva todavía no configurada, o un registro con otra estructura.
+      Cómo corregirlo: Si es una fuente legítima, agrégala a 'fuentes' en reglas.json con el mapeo de sus campos.
+      Registros: #19
+  1 x Identificador duplicado  [severidad alta]
+      Causa probable: Reenvío del mismo registro o ids reutilizados por la fuente.
+      Cómo corregirlo: Confirma con la fuente cuál de los dos registros es el correcto y elimina o renumera el otro.
+      Registros: #10
+  1 x Moneda no determinable  [severidad media]
+      Causa probable: Fuente que informa la moneda solo con un símbolo y el monto llegó sin él.
+      Cómo corregirlo: Incluye el símbolo de moneda en el monto o añade el código de moneda al registro.
+      Registros: #16
+  1 x Moneda no soportada  [severidad media]
+      Causa probable: Una moneda legítima que aún no se configuró, o un código mal escrito.
+      Cómo corregirlo: Si la moneda es legítima, agrégala a 'monedas_soportadas' y a 'simbolos_moneda' en reglas.json. Si es un typo, corrígelo.
+      Registros: #4
+  1 x Monto con demasiados decimales  [severidad media]
+      Causa probable: Cálculo sin redondear o un monto expresado en otra unidad.
+      Cómo corregirlo: Redondea el monto a 2 decimales en la fuente o confirma si está en otra unidad (por ejemplo centavos).
+      Registros: #14
+Recomendación: Empieza por los problemas de severidad alta; usa «plan de corrección» para ver el orden sugerido.
+
+[Auditor] > explica el registro 7
+[Auditor] Informe de calidad de datos
+Registro #7 (fuente_A):
+  Motivo: fecha no reconocida: '31/02/2025 10:30'
+    La fecha no coincide con ningún formato aceptado o no existe en el calendario.
+    Causa probable: Fecha imposible (como el 31 de febrero), texto libre o un formato no contemplado.
+    Cómo corregirlo: Corrige la fecha en la fuente. Si el formato es válido pero nuevo, agrégalo a 'formatos_fecha' en reglas.json.
+  Original: {"id": "e_007", "amount": "30.00", "currency": "USD", "timestamp": "31/02/2025 10:30", "status": "completed"}
+Recomendación: El valor está mal escrito o falta. Corrígelo en la fuente y vuelve a procesar el archivo.
+
+[Auditor] > qué registros tienen problemas de fecha
+[Auditor] Informe de calidad de datos
+3 registros inválidos tienen problemas de tipo 'fecha':
+  #7: fecha no reconocida: '31/02/2025 10:30'
+  #13: fecha con tipo no soportado (int); se esperaba texto
+  #18: fecha no reconocida: 'not a date'
+Recomendación: Usa «explica el registro N» para ver la causa y la corrección.
+
+[Auditor] > plan de corrección
+[Auditor] Informe de calidad de datos
+Plan de corrección, de mayor a menor cantidad de registros:
+  1. Corregir el dato en el origen (9 registros): #2, #3, #7, #12, #14, #15, #16, #18, #22
+     El valor está mal escrito o falta. Corrígelo en la fuente y vuelve a procesar el archivo.
+  2. Revisar con el dueño de la fuente (5 registros): #5, #6, #10, #13, #21
+     No es seguro corregirlo sin contexto (por ejemplo un monto cero o un id repetido). Confírmalo con quien genera los datos.
+  3. Ajustar las reglas (2 registros): #4, #19
+     Puede ser legítimo pero no está contemplado: agrega la moneda, la fuente o el formato en reglas.json si corresponde.
+  4. Descartar el registro (1 registro): #20
+     No tiene forma de transacción y no se puede recuperar.
+Recomendación: Corrige los datos y vuelve a procesar el archivo para comprobar el resultado.
+
+[Auditor] > lista las transacciones exitosas
+Esa solicitud corresponde a la skill 'consulta-transacciones', que no forma parte de mi función como Auditor. Cambia de agente con /agente analista.
+
+[Auditor] > exporta el reporte en la carpeta informe_auditoria
+Voy a escribir 4 archivos en 'informe_auditoria' (/tmp/tmp0kpor7hu/informe_auditoria): reporte.md, normalizadas.json, invalidas.json, metricas.json.
+¿Confirmas? (s/n)
+> s
+[Auditor] Informe de calidad de datos
+Listo: escribí 4 archivos en 'informe_auditoria': reporte.md, normalizadas.json, invalidas.json, metricas.json.
+
+[Auditor] > /salir
+
+Hasta luego.

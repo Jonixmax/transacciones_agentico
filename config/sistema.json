@@ -1,0 +1,21 @@
+{
+  "_descripcion": "Configuración global del sistema de agentes. 'decisiones' indica quién definió cada regla (ESTUDIANTE o PROPUESTA DE LA IA).",
+  "confirmar_efectos": "siempre",
+  "max_filas": 10,
+  "carpeta_skills": "skills",
+  "decisiones": [
+    { "regla": "Dos agentes: Analista (consultas y métricas) y Auditor (validación e inválidas)", "origen": "ESTUDIANTE" },
+    { "regla": "Skills: consulta-transacciones y diagnostico-invalidas", "origen": "ESTUDIANTE" },
+    { "regla": "Siempre pedir confirmación antes de escribir archivos o cargar otro archivo (confirmar_efectos = siempre)", "origen": "ESTUDIANTE" },
+    { "regla": "LLM en modo simulado, sin API key: un planificador determinista, no un LLM real", "origen": "ESTUDIANTE" },
+    { "regla": "Base del proyecto: el sistema de transacciones, al que se le agrega una capa agéntica con skills", "origen": "ESTUDIANTE" },
+    { "regla": "Skill exportar-reporte (única con efectos), siempre incluida", "origen": "PROPUESTA DE LA IA" },
+    { "regla": "Divulgación progresiva: el agente solo ve nombre y descripción de cada skill; SKILL.md completo se lee al elegirla", "origen": "PROPUESTA DE LA IA" },
+    { "regla": "Guardas: la acción del modelo se valida (skill existente y permitida, argumentos declarados y tipos) antes de ejecutarse", "origen": "PROPUESTA DE LA IA" },
+    { "regla": "La política de confirmación la aplica el agente, no el modelo: un modelo no puede saltársela", "origen": "PROPUESTA DE LA IA" },
+    { "regla": "Exportación: solo carpetas relativas dentro del proyecto (se rechazan rutas absolutas y '..')", "origen": "PROPUESTA DE LA IA" },
+    { "regla": "Los límites de montos y fechas en las consultas son inclusivos", "origen": "PROPUESTA DE LA IA" },
+    { "regla": "Un mensaje fuera del alcance del agente se deriva al agente que tiene la skill, sin ejecutarla", "origen": "PROPUESTA DE LA IA" },
+    { "regla": "Las métricas del Analista son conteos y totales por moneda de lo consultado (no se eligió una skill de métricas globales)", "origen": "PROPUESTA DE LA IA" }
+  ]
+}

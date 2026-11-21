@@ -1,0 +1,17 @@
+{
+  "operaciones": {
+    "plan": ["plan", "corregir", "correccion", "corrige", "arreglar", "solucionar", "solucion"],
+    "resumen": ["resumen", "resumir", "resumeme"],
+    "detalle": ["explica", "explicame", "explicar", "detalle", "detalla"]
+  },
+  "motivos": {
+    "fecha": ["fecha", "fechas"],
+    "monto": ["monto", "montos", "importe", "importes"],
+    "moneda": ["moneda", "monedas", "divisa", "divisas"],
+    "duplicado": ["duplicado", "duplicados", "repetido", "repetidos"],
+    "fuente": ["fuente", "fuentes"],
+    "campo": ["falta", "faltan", "faltante", "faltantes", "incompleto", "incompletos", "campo", "campos"],
+    "decimales": ["decimales"],
+    "objeto": ["objeto"]
+  }
+}

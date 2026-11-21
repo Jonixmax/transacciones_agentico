@@ -1,0 +1,69 @@
+# Conversación con el agente Analista
+# Generado ejecutando el sistema real en modo simulado (sin conexión ni API key).
+# Archivo de datos: datos/transacciones_validas.json
+==============================================================================
+Archivo cargado: 12 registros (12 válidos, 0 inválidos).
+
+Hola, soy Analista, analista de transacciones. Mi objetivo es responder consultas sobre las transacciones ya normalizadas y válidas: listar, filtrar, contar y sumar por moneda. Escribe 'ayuda' para ver qué puedo hacer.
+(Escribe /ayuda para ver los comandos)
+
+[Analista] > hola
+Hola, soy Analista, analista de transacciones. Mi objetivo es responder consultas sobre las transacciones ya normalizadas y válidas: listar, filtrar, contar y sumar por moneda. Escribe 'ayuda' para ver qué puedo hacer.
+
+[Analista] > lista las transacciones exitosas
+[Analista]
+6 transacciones válidas cumplen: estado: SUCCESS.
+ ID         FUENTE            MONTO MON. ESTADO   FECHA (UTC)
+ --------------------------------------------------------------------
+ tx_001     fuente_A         100.50 USD  SUCCESS  2025-03-10T14:22:00Z
+ tx_004     fuente_A       1,200.00 USD  SUCCESS  2025-03-13T17:45:00Z
+ tx_005     fuente_A          19.99 GBP  SUCCESS  2025-03-14T10:00:00Z
+ 204        fuente_B         100.50 USD  SUCCESS  2025-03-10T14:22:00Z
+ 207        fuente_B          19.99 GBP  SUCCESS  2025-03-13T12:00:00Z
+ A-77       fuente_C          99.99 EUR  SUCCESS  2025-03-10T14:22:00Z
+Suma por moneda de lo mostrado: EUR 99.99  GBP 39.98  USD 1,401.00
+
+[Analista] > cuánto suman las transacciones en dólares
+[Analista]
+6 transacciones cumplen: moneda: USD.
+  Moneda   Cant.           Total    Confirmado (SUCCESS)
+  USD          6        7,885.56                1,401.00
+
+[Analista] > busca el id A-77
+[Analista]
+Transacción A-77:
+  id         A-77
+  amount     99.99
+  currency   EUR
+  timestamp  2025-03-10T14:22:00Z
+  status     SUCCESS
+  source     fuente_C
+  original:  {"ref": "A-77", "amount": "€99,99", "date": "2025-03-10T14:22:00Z", "result": "success"}
+
+[Analista] > transacciones mayores a 1000 en dólares
+[Analista]
+3 transacciones válidas cumplen: moneda: USD, monto >=: 1000.
+ ID         FUENTE            MONTO MON. ESTADO   FECHA (UTC)
+ --------------------------------------------------------------------
+ tx_004     fuente_A       1,200.00 USD  SUCCESS  2025-03-13T17:45:00Z
+ 206        fuente_B       5,000.00 USD  FAILED   2025-03-12T23:59:00Z
+ A-78       fuente_C       1,234.56 USD  PENDING  2025-03-11T08:00:00Z
+Suma por moneda de lo mostrado: USD 7,434.56
+
+[Analista] > por qué se rechazaron los registros inválidos
+Eso corresponde a la skill 'diagnostico-invalidas', que no está disponible para Analista. Cambia de agente con /agente auditor.
+
+[Analista] > exporta el reporte
+Voy a escribir 4 archivos en 'salida_agente' (/tmp/tmpxuu29rsr/salida_agente): reporte.md, normalizadas.json, invalidas.json, metricas.json.
+¿Confirmas? (s/n)
+> n
+Acción cancelada. No se escribió nada.
+
+[Analista] > /traza
+  - decisión: {'accion': 'skill', 'skill': 'exportar-reporte', 'args': {}, 'razon': "el mensaje coincide con la descripción de 'exportar-reporte'"}
+  - política: la skill con efectos se pidió confirmar al usuario
+  - confirmación: el usuario canceló 'exportar-reporte'
+
+[Analista] > /salir
+
+Hasta luego.

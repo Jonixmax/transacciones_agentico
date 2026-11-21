@@ -1,0 +1,18 @@
+{
+  "operaciones": {
+    "buscar": ["buscar", "busca", "buscame", "detalle", "detalla", "encuentra"],
+    "contar": ["cuantas", "cuantos", "cantidad", "contar", "cuenta", "numero de"],
+    "totales": ["cuanto", "suman", "suma", "sumar", "total", "totales", "acumulado", "monto total"],
+    "listar": ["lista", "listar", "muestra", "muestrame", "mostrar", "ver", "dame"]
+  },
+  "estados": {
+    "SUCCESS": ["success", "exito", "exitosa", "exitosas", "exitoso", "exitosos", "completada", "completadas", "aprobada", "aprobadas", "confirmadas"],
+    "FAILED": ["failed", "fallida", "fallidas", "fallido", "fallidos", "fallo"],
+    "PENDING": ["pending", "pendiente", "pendientes", "procesando", "en proceso"]
+  },
+  "monedas": {
+    "USD": ["usd", "dolar", "dolares", "$"],
+    "EUR": ["eur", "euro", "euros", "€"],
+    "GBP": ["gbp", "libra", "libras", "£"]
+  }
+}

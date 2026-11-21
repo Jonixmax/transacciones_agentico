@@ -1,0 +1,183 @@
+{
+  "_descripcion": "Guía de causas y correcciones para cada tipo de rechazo (categoría = texto del motivo antes de ':' o '(').",
+  "categorias": {
+    "monto no numérico": {
+      "titulo": "Monto no numérico",
+      "explicacion": "El valor del monto no se pudo interpretar como un número.",
+      "causa_probable": "Texto libre, un valor vacío de sentido o un campo lleno con un dato equivocado.",
+      "correccion": "Corrige el monto en la fuente para que sea un número (por ejemplo 100.50) y vuelve a procesar.",
+      "severidad": "alta",
+      "accion": "corregir_dato"
+    },
+    "monto no positivo": {
+      "titulo": "Monto cero o negativo",
+      "explicacion": "El monto es cero o menor que cero, y la regla exige que sea mayor que 0.",
+      "causa_probable": "Puede ser un reembolso, una anulación o un error de captura.",
+      "correccion": "Confirma con la fuente si es un reembolso legítimo. Si debe aceptarse, hay que cambiar la regla; si es un error, corrígelo.",
+      "severidad": "media",
+      "accion": "revisar_fuente"
+    },
+    "monto con más de 2 decimales": {
+      "titulo": "Monto con demasiados decimales",
+      "explicacion": "El monto tiene más de 2 decimales y el sistema no redondea en silencio.",
+      "causa_probable": "Cálculo sin redondear o un monto expresado en otra unidad.",
+      "correccion": "Redondea el monto a 2 decimales en la fuente o confirma si está en otra unidad (por ejemplo centavos).",
+      "severidad": "media",
+      "accion": "corregir_dato"
+    },
+    "monto con tipo no soportado": {
+      "titulo": "Monto con tipo de dato no soportado",
+      "explicacion": "El monto llegó como un tipo que no es número ni texto (por ejemplo una lista).",
+      "causa_probable": "Estructura de datos incorrecta en la fuente.",
+      "correccion": "Revisa cómo la fuente genera el campo del monto.",
+      "severidad": "alta",
+      "accion": "revisar_fuente"
+    },
+    "monto con símbolos de moneda contradictorios": {
+      "titulo": "Símbolos de moneda contradictorios en el monto",
+      "explicacion": "El texto del monto mezcla símbolos de monedas distintas (por ejemplo $ y €).",
+      "causa_probable": "Texto mal construido o concatenado.",
+      "correccion": "Deja un solo símbolo de moneda en el monto.",
+      "severidad": "media",
+      "accion": "corregir_dato"
+    },
+    "formato de monto ambiguo": {
+      "titulo": "Formato de monto ambiguo",
+      "explicacion": "Los separadores de miles y decimales no permiten saber con certeza el valor.",
+      "causa_probable": "Mezcla de formatos regionales (coma y punto).",
+      "correccion": "Escribe el monto con un formato claro, por ejemplo 1234.56.",
+      "severidad": "media",
+      "accion": "corregir_dato"
+    },
+    "falta campo obligatorio": {
+      "titulo": "Falta un campo obligatorio",
+      "explicacion": "El registro no trae un dato que la fuente debe incluir siempre, o llegó vacío.",
+      "causa_probable": "Registro incompleto o exportación que omitió el campo.",
+      "correccion": "Completa el campo faltante en la fuente (el nombre del campo aparece en el motivo) y vuelve a procesar.",
+      "severidad": "alta",
+      "accion": "corregir_dato"
+    },
+    "moneda no soportada": {
+      "titulo": "Moneda no soportada",
+      "explicacion": "El código de moneda no está en la lista de monedas soportadas de reglas.json.",
+      "causa_probable": "Una moneda legítima que aún no se configuró, o un código mal escrito.",
+      "correccion": "Si la moneda es legítima, agrégala a 'monedas_soportadas' y a 'simbolos_moneda' en reglas.json. Si es un typo, corrígelo.",
+      "severidad": "media",
+      "accion": "configurar_reglas"
+    },
+    "moneda no determinable": {
+      "titulo": "Moneda no determinable",
+      "explicacion": "No hay código de moneda ni símbolo en el monto, así que no se sabe en qué moneda está.",
+      "causa_probable": "Fuente que informa la moneda solo con un símbolo y el monto llegó sin él.",
+      "correccion": "Incluye el símbolo de moneda en el monto o añade el código de moneda al registro.",
+      "severidad": "media",
+      "accion": "corregir_dato"
+    },
+    "conflicto de moneda": {
+      "titulo": "Conflicto de moneda",
+      "explicacion": "El símbolo del monto y el código de moneda indican monedas distintas.",
+      "causa_probable": "Datos contradictorios en el mismo registro.",
+      "correccion": "Decide cuál es la moneda correcta con la fuente y corrige el otro dato.",
+      "severidad": "alta",
+      "accion": "corregir_dato"
+    },
+    "moneda con tipo no soportado": {
+      "titulo": "Moneda con tipo de dato no soportado",
+      "explicacion": "El campo de moneda no es un texto.",
+      "causa_probable": "Estructura de datos incorrecta en la fuente.",
+      "correccion": "Envía la moneda como un código de texto (por ejemplo USD).",
+      "severidad": "media",
+      "accion": "corregir_dato"
+    },
+    "fecha no reconocida": {
+      "titulo": "Fecha no reconocida",
+      "explicacion": "La fecha no coincide con ningún formato aceptado o no existe en el calendario.",
+      "causa_probable": "Fecha imposible (como el 31 de febrero), texto libre o un formato no contemplado.",
+      "correccion": "Corrige la fecha en la fuente. Si el formato es válido pero nuevo, agrégalo a 'formatos_fecha' en reglas.json.",
+      "severidad": "media",
+      "accion": "corregir_dato"
+    },
+    "fecha con tipo no soportado": {
+      "titulo": "Fecha con tipo de dato no soportado",
+      "explicacion": "La fecha llegó como número (por ejemplo una marca de tiempo epoch) en lugar de texto.",
+      "causa_probable": "La fuente exporta fechas en formato numérico, que este sistema no soporta.",
+      "correccion": "Pide a la fuente que envíe la fecha como texto (por ejemplo ISO-8601).",
+      "severidad": "media",
+      "accion": "revisar_fuente"
+    },
+    "id duplicado": {
+      "titulo": "Identificador duplicado",
+      "explicacion": "Ya existe otra transacción aceptada con el mismo id en la misma fuente.",
+      "causa_probable": "Reenvío del mismo registro o ids reutilizados por la fuente.",
+      "correccion": "Confirma con la fuente cuál de los dos registros es el correcto y elimina o renumera el otro.",
+      "severidad": "alta",
+      "accion": "revisar_fuente"
+    },
+    "id con tipo no soportado": {
+      "titulo": "Identificador con tipo no soportado",
+      "explicacion": "El id no es un texto ni un entero.",
+      "causa_probable": "Estructura de datos incorrecta en la fuente.",
+      "correccion": "Envía el id como texto o como número entero.",
+      "severidad": "media",
+      "accion": "corregir_dato"
+    },
+    "fuente no reconocida": {
+      "titulo": "Fuente no reconocida",
+      "explicacion": "El registro no contiene ninguna de las claves que identifican a una fuente conocida.",
+      "causa_probable": "Una fuente nueva todavía no configurada, o un registro con otra estructura.",
+      "correccion": "Si es una fuente legítima, agrégala a 'fuentes' en reglas.json con el mapeo de sus campos.",
+      "severidad": "alta",
+      "accion": "configurar_reglas"
+    },
+    "fuente ambigua": {
+      "titulo": "Fuente ambigua",
+      "explicacion": "El registro trae claves de más de una fuente a la vez, por lo que no se sabe a cuál pertenece.",
+      "causa_probable": "Registros combinados o mal armados.",
+      "correccion": "Separa el registro o deja solo los campos de su fuente real.",
+      "severidad": "alta",
+      "accion": "revisar_fuente"
+    },
+    "el registro no es un objeto JSON": {
+      "titulo": "El registro no es un objeto",
+      "explicacion": "En la lista llegó un valor que no es un objeto JSON (por ejemplo un texto suelto).",
+      "causa_probable": "Datos ajenos mezclados con las transacciones.",
+      "correccion": "Elimina ese elemento del archivo: no tiene forma de transacción.",
+      "severidad": "media",
+      "accion": "descartar"
+    },
+    "estado fuera del esquema": {
+      "titulo": "Estado fuera del esquema",
+      "explicacion": "El estado normalizado no es ninguno de los estados válidos del esquema.",
+      "causa_probable": "Inconsistencia entre el mapeo de estados y el esquema en reglas.json.",
+      "correccion": "Revisa 'mapeo_estados' y 'estado_desconocido' en reglas.json.",
+      "severidad": "media",
+      "accion": "configurar_reglas"
+    }
+  },
+  "otro": {
+    "titulo": "Motivo sin guía",
+    "explicacion": "Este tipo de rechazo no está en la guía de la skill.",
+    "causa_probable": "No determinada.",
+    "correccion": "Revisa el motivo textual y el registro original.",
+    "severidad": "media",
+    "accion": "revisar_fuente"
+  },
+  "acciones": {
+    "corregir_dato": {
+      "titulo": "Corregir el dato en el origen",
+      "descripcion": "El valor está mal escrito o falta. Corrígelo en la fuente y vuelve a procesar el archivo."
+    },
+    "revisar_fuente": {
+      "titulo": "Revisar con el dueño de la fuente",
+      "descripcion": "No es seguro corregirlo sin contexto (por ejemplo un monto cero o un id repetido). Confírmalo con quien genera los datos."
+    },
+    "configurar_reglas": {
+      "titulo": "Ajustar las reglas",
+      "descripcion": "Puede ser legítimo pero no está contemplado: agrega la moneda, la fuente o el formato en reglas.json si corresponde."
+    },
+    "descartar": {
+      "titulo": "Descartar el registro",
+      "descripcion": "No tiene forma de transacción y no se puede recuperar."
+    }
+  }
+}
