@@ -9,7 +9,7 @@ Refactorización del sistema de normalización de transacciones multifuente (act
 
 La nota técnica con las decisiones de diseño está en [`NOTA_TECNICA.md`](NOTA_TECNICA.md).
 
-> ⚠️ **Aclaración honesta sobre el modelo.** El sistema funciona sin conexión con `--llm simulado`, un planificador determinista que no es un LLM real. También incluye un cliente para Google Gemini, que requiere una API key y conexión a internet (ver [Conectar un LLM real](#-conectar-un-llm-real)).
+>  **Aclaración  sobre el modelo.** El sistema funciona sin conexión con `--llm simulado`, un planificador determinista que no es un LLM real. También incluye un cliente para Google Gemini, que requiere una API key y conexión a internet (ver [Conectar un LLM real](#-conectar-un-llm-real)).
 
 ---
 
